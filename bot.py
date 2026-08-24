@@ -61,7 +61,13 @@ from typing import Any, Dict, List, Optional, Tuple
 from fastapi import FastAPI
 from pydantic import BaseModel
 
-app = FastAPI(title="Magicpin Vera Merchant Assistant", version="3.1.0")
+app = FastAPI(
+    title="Magicpin Vera Merchant Assistant",
+    version="3.1.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json"
+)
 START_TIME = time.time()
 
 # ============================================================================
@@ -102,7 +108,14 @@ class ReplyBody(BaseModel):
 # ============================================================================
 # BASIC ENDPOINTS
 # ============================================================================
-
+@app.get("/")
+async def root():
+    return {
+        "status": "ok",
+        "message": "Magicpin Vera Merchant Assistant API is live",
+        "docs": "/docs",
+        "health": "/v1/healthz"
+    }
 @app.get("/v1/healthz")
 async def healthz():
     counts = {"category": 0, "merchant": 0, "customer": 0, "trigger": 0}
